@@ -22,7 +22,9 @@ import { Song } from './songs/song.entity';
         entities: [Artist, Song],
         synchronize: true,
         ssl:
-          process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+          configService.get('DB_SSL') === 'true'
+            ? { rejectUnauthorized: false }
+            : false,
       }),
     }),
     ArtistsModule,
