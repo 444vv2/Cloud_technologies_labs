@@ -1,0 +1,17 @@
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+/dist
+/node_modules
+/build
+
+/coverage
+/.nyc_output
+
+
+terraform.tfvars
+*.tfstate
+.terraform/
