@@ -88,3 +88,7 @@ variable "health_check_healthy_threshold" {
 variable "health_check_unhealthy_threshold" {
   type = number
 }
+
+variable "github_repo" {
+  type = string
+}
