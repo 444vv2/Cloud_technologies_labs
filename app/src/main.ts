@@ -8,7 +8,7 @@ async function bootstrap() {
     .setTitle('Artists+Music API')
     .setDescription('API documentation for Artists and Songs service')
     .setVersion('1.0')
-    .addBasicAuth()
+    .addBearerAuth()
     .addSecurityRequirements('bearer')
     .build();
 
