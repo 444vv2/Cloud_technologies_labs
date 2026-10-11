@@ -8,12 +8,16 @@ async function bootstrap() {
     .setTitle('Artists+Music API')
     .setDescription('API documentation for Artists and Songs service')
     .setVersion('1.0')
+    .addBasicAuth()
+    .addSecurityRequirements('bearer')
     .build();
 
   const swagger = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger', app, swagger, { useGlobalPrefix: true });
+  SwaggerModule.setup('swagger', app, swagger, {
+    useGlobalPrefix: true,
+    swaggerOptions: { persistAuthorization: true },
+  });
 
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
-

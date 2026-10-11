@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ArtistsModule } from './artists/artists.module';
 import { SongsModule } from './songs/songs.module';
+import { AuthModule } from './auth/auth.module';
 import { HealthController } from './health.controller';
 import { Artist } from './artists/artist.entity';
 import { Song } from './songs/song.entity';
@@ -29,6 +30,7 @@ import { Song } from './songs/song.entity';
     }),
     ArtistsModule,
     SongsModule,
+    AuthModule,
   ],
   controllers: [HealthController],
 })

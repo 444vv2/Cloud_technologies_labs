@@ -40,7 +40,10 @@ resource "aws_ecs_task_definition" "app" {
         { name = "DB_USER", value = var.db_username },
         { name = "DB_PASSWORD", value = random_password.db.result },
         { name = "DB_NAME", value = var.db_name },
-        { name = "DB_SSL", value = tostring(var.db_ssl) }
+        { name = "DB_SSL", value = tostring(var.db_ssl) },
+        { name = "AWS_REGION",           value = data.aws_region.current.id },
+        { name = "COGNITO_USER_POOL_ID", value = aws_cognito_user_pool.main.id },
+        { name = "COGNITO_CLIENT_ID",    value = aws_cognito_user_pool_client.app.id },
       ]
 
       logConfiguration = {
