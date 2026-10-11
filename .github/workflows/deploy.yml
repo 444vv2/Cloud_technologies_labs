@@ -22,7 +22,7 @@ env:
   ECS_CLUSTER: ${{ vars.ECS_CLUSTER }}
   ECS_SERVICE: ${{ vars.ECS_SERVICE }}
   CONTAINER_NAME: ${{ vars.ECS_CONTAINER_NAME }}
-  APP_DIR: ./Cloud/app
+  APP_DIR: ./app
 
 jobs:
   deploy:
