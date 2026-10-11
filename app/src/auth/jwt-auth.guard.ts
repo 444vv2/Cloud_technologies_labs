@@ -17,7 +17,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (isPublic) {
       return true;
     }
-    // без токена / з невалідним токеном passport віддасть 401
     return super.canActivate(context);
   }
 }
