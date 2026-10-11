@@ -92,3 +92,7 @@ variable "health_check_unhealthy_threshold" {
 variable "github_repo" {
   type = string
 }
+
+variable "alert_email" {
+  type = string
+}
