@@ -1,1 +1,0 @@
-# Cloud_technologies_labs
