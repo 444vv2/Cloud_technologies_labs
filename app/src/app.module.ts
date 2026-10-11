@@ -5,6 +5,7 @@ import { ArtistsModule } from './artists/artists.module';
 import { SongsModule } from './songs/songs.module';
 import { AuthModule } from './auth/auth.module';
 import { HealthController } from './health.controller';
+import { DebugController } from './debug.controller';
 import { Artist } from './artists/artist.entity';
 import { Song } from './songs/song.entity';
 
@@ -32,6 +33,6 @@ import { Song } from './songs/song.entity';
     SongsModule,
     AuthModule,
   ],
-  controllers: [HealthController],
+  controllers: [HealthController, DebugController],
 })
 export class AppModule {}
