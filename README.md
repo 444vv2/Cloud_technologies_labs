@@ -20,10 +20,17 @@ Cloud
 │  │  │     ├─ create-artist.dto.ts
 │  │  │     └─ update-artist.dto.ts
 │  │  ├─ auth
+│  │  │  ├─ auth.controller.ts
 │  │  │  ├─ auth.module.ts
+│  │  │  ├─ auth.service.ts
+│  │  │  ├─ dto
+│  │  │  │  ├─ confirm.dto.ts
+│  │  │  │  ├─ login.dto.ts
+│  │  │  │  └─ sign-up.dto.ts
 │  │  │  ├─ jwt-auth.guard.ts
 │  │  │  ├─ jwt.strategy.ts
 │  │  │  └─ public.decorator.ts
+│  │  ├─ debug.controller.ts
 │  │  ├─ health.controller.ts
 │  │  ├─ main.ts
 │  │  └─ songs
@@ -45,6 +52,7 @@ Cloud
 │  ├─ ecs.tf
 │  ├─ github_oidc.tf
 │  ├─ iam.tf
+│  ├─ monitoring.tf
 │  ├─ network.tf
 │  ├─ outputs.tf
 │  ├─ providers.tf
