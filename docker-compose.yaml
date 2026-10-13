@@ -31,7 +31,7 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
-      DB_SSL: ${DB_SSL:-false}
+      DB_SSL: ${DB_SSL}
     ports:
       - ${PORT}:${PORT}
     depends_on:

@@ -3,7 +3,7 @@ import { Public } from './auth/public.decorator';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Public()
-@ApiTags('Health')
+@ApiTags('Health1')
 @Controller('health')
 export class HealthController {
   @Get()
