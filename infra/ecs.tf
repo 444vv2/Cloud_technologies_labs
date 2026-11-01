@@ -34,16 +34,19 @@ resource "aws_ecs_task_definition" "app" {
       ]
 
       environment = [
-        { name = "PORT", value = tostring(var.container_port) },
-        { name = "DB_HOST", value = aws_db_instance.main.address },
-        { name = "DB_PORT", value = tostring(var.db_port) },
-        { name = "DB_USER", value = var.db_username },
-        { name = "DB_PASSWORD", value = random_password.db.result },
-        { name = "DB_NAME", value = var.db_name },
-        { name = "DB_SSL", value = tostring(var.db_ssl) },
+        { name = "PORT",                 value = tostring(var.container_port) },
         { name = "AWS_REGION",           value = data.aws_region.current.id },
-        { name = "COGNITO_USER_POOL_ID", value = aws_cognito_user_pool.main.id },
-        { name = "COGNITO_CLIENT_ID",    value = aws_cognito_user_pool_client.app.id },
+      ]
+
+      secrets = [
+        { name = "DB_HOST",              valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_HOST::" },
+        { name = "DB_PORT",              valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_PORT::" },
+        { name = "DB_USER",              valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_USER::" },
+        { name = "DB_PASSWORD",          valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_PASSWORD::" },
+        { name = "DB_NAME",              valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_NAME::" },
+        { name = "DB_SSL",               valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_SSL::" },
+        { name = "COGNITO_USER_POOL_ID", valueFrom = "${aws_secretsmanager_secret.db.arn}:COGNITO_USER_POOL_ID::" },
+        { name = "COGNITO_CLIENT_ID",    valueFrom = "${aws_secretsmanager_secret.db.arn}:COGNITO_CLIENT_ID::" },
       ]
 
       logConfiguration = {

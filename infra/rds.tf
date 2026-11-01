@@ -3,6 +3,25 @@ resource "random_password" "db" {
   special = false
 }
 
+resource "aws_secretsmanager_secret" "db" {
+  name                    = "${var.project_name}/db"
+  recovery_window_in_days = 7
+}
+
+resource "aws_secretsmanager_secret_version" "db" {
+  secret_id = aws_secretsmanager_secret.db.id
+  secret_string = jsonencode({
+    DB_HOST              = aws_db_instance.main.address
+    DB_PORT              = tostring(var.db_port)
+    DB_USER              = var.db_username
+    DB_PASSWORD          = random_password.db.result
+    DB_NAME              = var.db_name
+    DB_SSL               = tostring(var.db_ssl)
+    COGNITO_USER_POOL_ID = aws_cognito_user_pool.main.id
+    COGNITO_CLIENT_ID    = aws_cognito_user_pool_client.app.id
+  })
+}
+
 resource "aws_db_subnet_group" "main" {
   name       = "${var.project_name}-db-subnets"
   subnet_ids = aws_subnet.private[*].id
