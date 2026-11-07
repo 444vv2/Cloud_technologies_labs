@@ -109,25 +109,19 @@ variable "alert_email" {
 
 variable "cache_enabled" {
   type    = bool
-  default = true
 }
 variable "autoscaling_min" {
   type    = number
-  default = 1
 }
 variable "autoscaling_max" {
   type    = number
-  default = 3
 }
 variable "autoscaling_cpu_target" {
   type    = number
-  default = 65
 }
 variable "scale_out_cooldown" {
   type    = number
-  default = 65
 }
 variable "scale_in_cooldown" {
   type    = number
-  default = 300
 }
