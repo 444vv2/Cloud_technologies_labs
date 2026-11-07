@@ -4,7 +4,7 @@ import { CacheService } from './cache/cache.service';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Public()
-@ApiTags('Debug12')
+@ApiTags('Debug1')
 @Controller('debug')
 export class DebugController {
   constructor(private readonly cache: CacheService) {}
