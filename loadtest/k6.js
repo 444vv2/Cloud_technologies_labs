@@ -1,9 +1,8 @@
 import http from "k6/http";
 import { check, sleep } from "k6";
-import process from "process";
 
-const BASE = process.env.BASE_URL;
-const N = Number(process.env.VUS || 40);
+const BASE = __ENV.BASE_URL;
+const N = Number(__ENV.VUS || 40);
 const READS = 9;
 
 export const options = {
@@ -23,21 +22,20 @@ const json = { "Content-Type": "application/json" };
 export function setup() {
   const login = http.post(
     `${BASE}/auth/login`,
-    JSON.stringify({
-      email: process.env.EMAIL,
-      password: process.env.PASSWORD,
-    }),
+    JSON.stringify({ email: __ENV.EMAIL, password: __ENV.PASSWORD }),
     { headers: json },
   );
   const token = login.json("accessToken");
-  if (!token) throw new Error(`login failed: ${login.status} ${login.body}`);
+  if (!token) throw new Error(`login failed: ${login.status} ${login.body} (password length ${(__ENV.PASSWORD || '').length})`);
   const h = { ...json, Authorization: `Bearer ${token}` };
   const artist = http.post(
     `${BASE}/artists`,
-    JSON.stringify({ name: "k6 artist" }),
+    JSON.stringify({ name: `k6 artist ${Date.now()}` }),
     { headers: h },
   );
-  return { h, artistId: artist.json("id") };
+  const artistId = artist.json("id");
+  if (!artistId) throw new Error(`artist create failed: ${artist.status} ${artist.body}`);
+  return { h, artistId };
 }
 
 export default function ({ h, artistId }) {

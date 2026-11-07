@@ -6,8 +6,8 @@ ElastiCache `cache.t4g.micro` (`infra/redis.tf`), доступ лише з secur
 
 |                     | Без кешу | З кешем |
 | ------------------- | -------- | ------- |
-| p95                 | TODO     | TODO    |
-| запитів/с           | TODO     | TODO    |
+| p95                 | 2,11 с   | TODO    |
+| запитів/с           | 33,9     | TODO    |
 | CPU RDS / з'єднання | TODO     | TODO    |
 | частка влучань      | —        | TODO    |
 
