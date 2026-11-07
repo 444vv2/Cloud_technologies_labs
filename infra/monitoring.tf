@@ -51,6 +51,27 @@ resource "aws_cloudwatch_metric_alarm" "unhealthy_hosts" {
   ok_actions    = [aws_sns_topic.alerts.arn]
 }
 
+resource "aws_cloudwatch_metric_alarm" "cpu_high" {
+  alarm_name          = "${var.project_name}-cpu-high"
+  alarm_description   = "CPU > 70% for 2 minutes"
+  namespace           = "AWS/ECS"
+  metric_name         = "CPUUtilization"
+  dimensions = {
+    ClusterName = aws_ecs_cluster.main.name
+    ServiceName = aws_ecs_service.app.name
+  }
+  statistic           = "Average"
+  period              = 60
+  evaluation_periods  = 2
+  datapoints_to_alarm = 2
+  threshold           = 70
+  comparison_operator = "GreaterThanThreshold"
+  treat_missing_data  = "notBreaching"
+
+  alarm_actions = [aws_sns_topic.alerts.arn]
+  ok_actions    = [aws_sns_topic.alerts.arn]
+}
+
 resource "aws_cloudwatch_dashboard" "main" {
   dashboard_name = "${var.project_name}-dashboard"
 
@@ -123,12 +144,13 @@ resource "aws_cloudwatch_dashboard" "main" {
       {
         type = "metric", x = 12, y = 12, width = 12, height = 6
         properties = {
-          title  = "ECS memory utilization (%)"
+          title  = "ECS tasks"
           view   = "timeSeries"
           region = var.region
           period = 60
           metrics = [
-            ["AWS/ECS", "MemoryUtilization", "ClusterName", aws_ecs_cluster.main.name, "ServiceName", aws_ecs_service.app.name, { stat = "Average", label = "Memory" }]
+            ["ECS/ContainerInsights", "DesiredTaskCount", "ClusterName", aws_ecs_cluster.main.name, "ServiceName", aws_ecs_service.app.name, { stat = "Maximum", label = "Desired" }],
+            ["ECS/ContainerInsights", "RunningTaskCount", "ClusterName", aws_ecs_cluster.main.name, "ServiceName", aws_ecs_service.app.name, { stat = "Maximum", label = "Running" }]
           ]
         }
       },

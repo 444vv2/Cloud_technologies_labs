@@ -46,7 +46,18 @@ variable "db_password_length" {
 variable "db_ssl" {
   type = bool
 }
-
+variable "redis_port" {
+  type = number
+}
+variable "redis_engine_version" {
+  type = number
+}
+variable "redis_engine" {
+  type = string
+}
+variable "redis_cache_node_type" {
+  type = string
+}
 
 
 variable "target_group_deregistration_delay" {
@@ -92,7 +103,31 @@ variable "health_check_unhealthy_threshold" {
 variable "github_repo" {
   type = string
 }
-
 variable "alert_email" {
   type = string
+}
+
+variable "cache_enabled" {
+  type    = bool
+  default = true
+}
+variable "autoscaling_min" {
+  type    = number
+  default = 1
+}
+variable "autoscaling_max" {
+  type    = number
+  default = 3
+}
+variable "autoscaling_cpu_target" {
+  type    = number
+  default = 65
+}
+variable "scale_out_cooldown" {
+  type    = number
+  default = 65
+}
+variable "scale_in_cooldown" {
+  type    = number
+  default = 300
 }

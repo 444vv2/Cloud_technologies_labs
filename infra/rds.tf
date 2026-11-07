@@ -5,7 +5,7 @@ resource "random_password" "db" {
 
 resource "aws_secretsmanager_secret" "db" {
   name                    = "${var.project_name}/db"
-  recovery_window_in_days = 7
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "db" {
@@ -19,6 +19,7 @@ resource "aws_secretsmanager_secret_version" "db" {
     DB_SSL               = tostring(var.db_ssl)
     COGNITO_USER_POOL_ID = aws_cognito_user_pool.main.id
     COGNITO_CLIENT_ID    = aws_cognito_user_pool_client.app.id
+    REDIS_URL            = "redis://${aws_elasticache_cluster.redis.cache_nodes[0].address}:${var.redis_port}"
   })
 }
 

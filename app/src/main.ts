@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableShutdownHooks();
   const config = new DocumentBuilder()
     .setTitle('Artists+Music API')
     .setDescription('API documentation for Artists and Songs service')

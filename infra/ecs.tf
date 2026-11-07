@@ -5,6 +5,11 @@ resource "aws_cloudwatch_log_group" "app" {
 
 resource "aws_ecs_cluster" "main" {
   name = "${var.project_name}-cluster"
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
 }
 
 resource "aws_ecs_task_definition" "app" {
@@ -36,6 +41,7 @@ resource "aws_ecs_task_definition" "app" {
       environment = [
         { name = "PORT",                 value = tostring(var.container_port) },
         { name = "AWS_REGION",           value = data.aws_region.current.id },
+        { name = "CACHE_ENABLED",        value = tostring(var.cache_enabled) },
       ]
 
       secrets = [
@@ -47,6 +53,7 @@ resource "aws_ecs_task_definition" "app" {
         { name = "DB_SSL",               valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_SSL::" },
         { name = "COGNITO_USER_POOL_ID", valueFrom = "${aws_secretsmanager_secret.db.arn}:COGNITO_USER_POOL_ID::" },
         { name = "COGNITO_CLIENT_ID",    valueFrom = "${aws_secretsmanager_secret.db.arn}:COGNITO_CLIENT_ID::" },
+        { name = "REDIS_URL",            valueFrom = "${aws_secretsmanager_secret.db.arn}:REDIS_URL::" },
       ]
 
       logConfiguration = {
@@ -85,6 +92,6 @@ resource "aws_ecs_service" "app" {
   depends_on = [aws_lb_listener.http]
 
   lifecycle {
-    ignore_changes = [task_definition]
+    ignore_changes = [task_definition, desired_count]
   }
 }

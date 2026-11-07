@@ -8,6 +8,7 @@ import { HealthController } from './health.controller';
 import { DebugController } from './debug.controller';
 import { Artist } from './artists/artist.entity';
 import { Song } from './songs/song.entity';
+import { CacheModule } from './cache/cache.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { Song } from './songs/song.entity';
             : false,
       }),
     }),
+    CacheModule,
     ArtistsModule,
     SongsModule,
     AuthModule,
