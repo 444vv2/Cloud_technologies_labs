@@ -18,7 +18,6 @@ export class CacheService implements OnModuleDestroy {
     if (!this.redis) return;
     try {
       const raw = await this.redis.get(key);
-      await this.redis.incr(raw ? 'stats:hit' : 'stats:miss');
       return raw ? (JSON.parse(raw) as T) : undefined;
     } catch {
       return;
@@ -38,19 +37,6 @@ export class CacheService implements OnModuleDestroy {
       if (keys.length) await this.redis.del(...keys);
     } catch {
     }
-  }
-
-  async stats() {
-    if (!this.redis) return { enabled: false };
-    const [hit, miss] = (await this.redis.mget('stats:hit', 'stats:miss')).map(
-      (v) => Number(v ?? 0),
-    );
-    return {
-      enabled: true,
-      hit,
-      miss,
-      hitRate: hit + miss ? hit / (hit + miss) : 0,
-    };
   }
 
   async onModuleDestroy() {

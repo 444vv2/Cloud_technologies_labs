@@ -1,20 +1,28 @@
 # Кешування (Redis, cache-aside)
 
-ElastiCache `cache.t4g.micro` (`infra/redis.tf`), доступ лише з security group додатка. Кешується `GET /songs` (ключ `songs:list:all` або `songs:list:<artistId>`), TTL 45 с. Інвалідація: `create/update/remove` видаляють усі ключі `songs:list:*`. Прапорець `CACHE_ENABLED`; лічильники — `GET /debug/cache`. Redis недоступний → додаток читає з бази.
+ElastiCache `cache.t4g.micro` (`infra/redis.tf`), доступ лише з security group додатка. Кешується `GET /songs` (ключ `songs:list:all` або `songs:list:<artistId>`), TTL 45 с. Інвалідація: `create/update/remove` видаляють усі ключі `songs:list:*`. Прапорець `CACHE_ENABLED`. Redis недоступний → додаток читає з бази.
 
 ## Результати
 
-|                     | Без кешу   | З кешем     |
-| ------------------- | ---------- | ----------- |
-| p95                 | 5,11s         | 2.3s        |
-| запитів/с           | 1.467417/s | 32.340216/s |
-| avg                 | 1.83s      | 678.93ms    |
-| min                 | 17.59ms    | 17.77ms     |
-| med                 | 1.38s      | 405.87ms    |
-| max                 | 13.39s     | 4.68s       |
-| p90                 | 4.15s      | 1.8s        |
-| CPU RDS / з'єднання | TODO       | TODO        |
-| частка влучань      | —          | TODO        |
+|           | Без кешу 1 | З кешем 1   |
+| --------- | ---------- | ----------- |
+| p95       | 5,11s      | 2.3s        |
+| запитів/с | 1.467417/s | 32.340216/s |
+| avg       | 1.83s      | 678.93ms    |
+| min       | 17.59ms    | 17.77ms     |
+| med       | 1.38s      | 405.87ms    |
+| max       | 13.39s     | 4.68s       |
+| p90       | 4.15s      | 1.8s        |
+
+|           | Без кешу 2 | З кешем 2   |
+| --------- | ---------- | ----------- |
+| p95       | 5,11s      | 1.49s       |
+| запитів/с | 1.467417/s | 44.135903/s |
+| avg       | 1.83s      | 428.09ms    |
+| min       | 17.59ms    | 14.1ms      |
+| med       | 1.38s      | 211.66ms    |
+| max       | 13.39s     | 4.76s       |
+| p90       | 4.15s      | 1.13s       |
 
 ## Застарілі дані
 
