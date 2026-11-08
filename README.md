@@ -30,6 +30,9 @@ Cloud
 │  │  │  ├─ jwt-auth.guard.ts
 │  │  │  ├─ jwt.strategy.ts
 │  │  │  └─ public.decorator.ts
+│  │  ├─ cache
+│  │  │  ├─ cache.module.ts
+│  │  │  └─ cache.service.ts
 │  │  ├─ debug.controller.ts
 │  │  ├─ health.controller.ts
 │  │  ├─ main.ts
@@ -44,9 +47,25 @@ Cloud
 │  ├─ tsconfig.build.json
 │  └─ tsconfig.json
 ├─ docker-compose.yaml
+├─ docs
+│  ├─ ALERTS.md
+│  ├─ AUTOSCALING.md
+│  ├─ CACHE-LOADTEST.md
+│  └─ public
+│     ├─ cache
+│     │  ├─ alarm_msg.png
+│     │  ├─ ecs.png
+│     │  ├─ monitors.png
+│     │  └─ rds.png
+│     └─ no_cache
+│        ├─ alarm_msg.png
+│        ├─ cpu_metric.png
+│        ├─ ecs.png
+│        └─ monitors.png
 ├─ infra
 │  ├─ .terraform.lock.hcl
 │  ├─ alb.tf
+│  ├─ autoscaling.tf
 │  ├─ cognito.tf
 │  ├─ ecr.tf
 │  ├─ ecs.tf
@@ -57,8 +76,11 @@ Cloud
 │  ├─ outputs.tf
 │  ├─ providers.tf
 │  ├─ rds.tf
+│  ├─ redis.tf
 │  ├─ security.tf
 │  └─ variables.tf
+├─ loadtest
+│  └─ k6.js
 └─ README.md
 
 ```
