@@ -11,6 +11,7 @@ import { QueueService } from '../queue/queue.service';
 
 const LIST_PREFIX = 'songs:list:';
 const LIST_TTL_SEC = 45;
+const MAX_SONGS = 1000;
 
 @Injectable()
 export class SongsService {
@@ -47,6 +48,7 @@ export class SongsService {
     const songs = await this.repo.find({
       where: artistId ? { artistId } : {},
       order: { createdAt: 'DESC' },
+      take: MAX_SONGS,
     });
     await this.cache.set(key, songs, LIST_TTL_SEC);
     return songs;
