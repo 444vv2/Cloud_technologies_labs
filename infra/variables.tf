@@ -108,20 +108,52 @@ variable "alert_email" {
 }
 
 variable "cache_enabled" {
-  type    = bool
+  type = bool
 }
 variable "autoscaling_min" {
-  type    = number
+  type = number
 }
 variable "autoscaling_max" {
-  type    = number
+  type = number
 }
 variable "autoscaling_cpu_target" {
-  type    = number
+  type = number
 }
 variable "scale_out_cooldown" {
-  type    = number
+  type = number
 }
 variable "scale_in_cooldown" {
-  type    = number
+  type = number
+}
+
+variable "async_writes" {
+  type = bool
+}
+variable "queue_visibility_timeout" {
+  type = number
+}
+variable "worker_min" {
+  type = number
+}
+variable "worker_max" {
+  type = number
+}
+variable "worker_backlog_target" {
+  type = number
+}
+
+variable "schedule_day_cron" {
+  type = string
+}
+variable "schedule_night_cron" {
+  type = string
+}
+variable "schedule_timezone" {
+  type = string
+}
+variable "schedule_day_min" {
+  type = number
+}
+variable "schedule_night_min" {
+  type = number
 }

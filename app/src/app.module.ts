@@ -9,6 +9,7 @@ import { DebugController } from './debug.controller';
 import { Artist } from './artists/artist.entity';
 import { Song } from './songs/song.entity';
 import { CacheModule } from './cache/cache.module';
+import { QueueModule } from './queue/queue.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { CacheModule } from './cache/cache.module';
       }),
     }),
     CacheModule,
+    QueueModule,
     ArtistsModule,
     SongsModule,
     AuthModule,

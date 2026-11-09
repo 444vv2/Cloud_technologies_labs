@@ -34,6 +34,14 @@ output "dashboard_url" {
   value = "https://${var.region}.console.aws.amazon.com/cloudwatch/home?region=${var.region}#dashboards:name=${aws_cloudwatch_dashboard.main.dashboard_name}"
 }
 
+output "ecs_worker_service_name" {
+  value = aws_ecs_service.worker.name
+}
+
+output "songs_queue_url" {
+  value = aws_sqs_queue.songs.url
+}
+
 output "alerts_topic_arn" {
   value = aws_sns_topic.alerts.arn
 }

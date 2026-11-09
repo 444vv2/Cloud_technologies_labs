@@ -34,3 +34,29 @@ resource "aws_iam_role_policy" "task_execution_secrets" {
     ]
   })
 }
+
+resource "aws_iam_role" "task" {
+  name               = "${var.project_name}-task-role"
+  assume_role_policy = data.aws_iam_policy_document.ecs_tasks_assume.json
+}
+
+resource "aws_iam_role_policy" "task_sqs" {
+  name = "${var.project_name}-task-sqs"
+  role = aws_iam_role.task.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "sqs:SendMessage",
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes",
+        ]
+        Resource = aws_sqs_queue.songs.arn
+      }
+    ]
+  })
+}

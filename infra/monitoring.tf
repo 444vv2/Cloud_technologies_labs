@@ -31,10 +31,10 @@ resource "aws_cloudwatch_metric_alarm" "target_5xx" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "unhealthy_hosts" {
-  alarm_name          = "${var.project_name}-unhealthy-hosts"
-  alarm_description   = "health check fails"
-  namespace           = "AWS/ApplicationELB"
-  metric_name         = "UnHealthyHostCount"
+  alarm_name        = "${var.project_name}-unhealthy-hosts"
+  alarm_description = "health check fails"
+  namespace         = "AWS/ApplicationELB"
+  metric_name       = "UnHealthyHostCount"
   dimensions = {
     LoadBalancer = local.mon_alb
     TargetGroup  = local.mon_tg
@@ -52,10 +52,10 @@ resource "aws_cloudwatch_metric_alarm" "unhealthy_hosts" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cpu_high" {
-  alarm_name          = "${var.project_name}-cpu-high"
-  alarm_description   = "CPU > 70% for 2 minutes"
-  namespace           = "AWS/ECS"
-  metric_name         = "CPUUtilization"
+  alarm_name        = "${var.project_name}-cpu-high"
+  alarm_description = "CPU > 70% for 2 minutes"
+  namespace         = "AWS/ECS"
+  metric_name       = "CPUUtilization"
   dimensions = {
     ClusterName = aws_ecs_cluster.main.name
     ServiceName = aws_ecs_service.app.name
@@ -155,7 +155,33 @@ resource "aws_cloudwatch_dashboard" "main" {
         }
       },
       {
-        type = "log", x = 0, y = 18, width = 24, height = 8
+        type = "metric", x = 0, y = 18, width = 12, height = 6
+        properties = {
+          title  = "Queue: visible messages / oldest message age"
+          view   = "timeSeries"
+          region = var.region
+          period = 60
+          metrics = [
+            ["AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", aws_sqs_queue.songs.name, { stat = "Maximum", label = "Visible" }],
+            ["AWS/SQS", "ApproximateAgeOfOldestMessage", "QueueName", aws_sqs_queue.songs.name, { stat = "Maximum", label = "Oldest age (s)", yAxis = "right" }]
+          ]
+        }
+      },
+      {
+        type = "metric", x = 12, y = 18, width = 12, height = 6
+        properties = {
+          title  = "Worker tasks"
+          view   = "timeSeries"
+          region = var.region
+          period = 60
+          metrics = [
+            ["ECS/ContainerInsights", "DesiredTaskCount", "ClusterName", aws_ecs_cluster.main.name, "ServiceName", aws_ecs_service.worker.name, { stat = "Maximum", label = "Desired" }],
+            ["ECS/ContainerInsights", "RunningTaskCount", "ClusterName", aws_ecs_cluster.main.name, "ServiceName", aws_ecs_service.worker.name, { stat = "Maximum", label = "Running" }]
+          ]
+        }
+      },
+      {
+        type = "log", x = 0, y = 24, width = 24, height = 8
         properties = {
           title  = "Application logs (latest 20)"
           view   = "table"

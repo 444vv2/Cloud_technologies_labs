@@ -20,6 +20,7 @@ resource "aws_secretsmanager_secret_version" "db" {
     COGNITO_USER_POOL_ID = aws_cognito_user_pool.main.id
     COGNITO_CLIENT_ID    = aws_cognito_user_pool_client.app.id
     REDIS_URL            = "redis://${aws_elasticache_cluster.redis.cache_nodes[0].address}:${var.redis_port}"
+    QUEUE_URL            = aws_sqs_queue.songs.url
   })
 }
 

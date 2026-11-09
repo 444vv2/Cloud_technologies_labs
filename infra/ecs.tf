@@ -19,6 +19,7 @@ resource "aws_ecs_task_definition" "app" {
   cpu                      = var.task_cpu
   memory                   = var.task_memory
   execution_role_arn       = aws_iam_role.task_execution.arn
+  task_role_arn            = aws_iam_role.task.arn
 
   runtime_platform {
     operating_system_family = "LINUX"
@@ -39,21 +40,23 @@ resource "aws_ecs_task_definition" "app" {
       ]
 
       environment = [
-        { name = "PORT",                 value = tostring(var.container_port) },
-        { name = "AWS_REGION",           value = data.aws_region.current.id },
-        { name = "CACHE_ENABLED",        value = tostring(var.cache_enabled) },
+        { name = "PORT", value = tostring(var.container_port) },
+        { name = "AWS_REGION", value = data.aws_region.current.id },
+        { name = "CACHE_ENABLED", value = tostring(var.cache_enabled) },
+        { name = "ASYNC_WRITES", value = tostring(var.async_writes) },
       ]
 
       secrets = [
-        { name = "DB_HOST",              valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_HOST::" },
-        { name = "DB_PORT",              valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_PORT::" },
-        { name = "DB_USER",              valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_USER::" },
-        { name = "DB_PASSWORD",          valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_PASSWORD::" },
-        { name = "DB_NAME",              valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_NAME::" },
-        { name = "DB_SSL",               valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_SSL::" },
+        { name = "DB_HOST", valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_HOST::" },
+        { name = "DB_PORT", valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_PORT::" },
+        { name = "DB_USER", valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_USER::" },
+        { name = "DB_PASSWORD", valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_PASSWORD::" },
+        { name = "DB_NAME", valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_NAME::" },
+        { name = "DB_SSL", valueFrom = "${aws_secretsmanager_secret.db.arn}:DB_SSL::" },
         { name = "COGNITO_USER_POOL_ID", valueFrom = "${aws_secretsmanager_secret.db.arn}:COGNITO_USER_POOL_ID::" },
-        { name = "COGNITO_CLIENT_ID",    valueFrom = "${aws_secretsmanager_secret.db.arn}:COGNITO_CLIENT_ID::" },
-        { name = "REDIS_URL",            valueFrom = "${aws_secretsmanager_secret.db.arn}:REDIS_URL::" },
+        { name = "COGNITO_CLIENT_ID", valueFrom = "${aws_secretsmanager_secret.db.arn}:COGNITO_CLIENT_ID::" },
+        { name = "REDIS_URL", valueFrom = "${aws_secretsmanager_secret.db.arn}:REDIS_URL::" },
+        { name = "QUEUE_URL", valueFrom = "${aws_secretsmanager_secret.db.arn}:QUEUE_URL::" },
       ]
 
       logConfiguration = {

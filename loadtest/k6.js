@@ -44,17 +44,23 @@ export default function ({ h, artistId }) {
     JSON.stringify({ title: `k6-${__VU}-${__ITER}`, artistId }),
     { headers: h },
   );
-  check(created, { "create 201": (r) => r.status === 201 });
+  // 201 = sync write, 202 = queued (ASYNC_WRITES=true)
+  check(created, { "create 201/202": (r) => r.status === 201 || r.status === 202 });
   const songId = created.json("id");
+  const queued = created.status === 202;
 
   for (let i = 0; i < READS; i++) {
     const res =
       i % 3 === 0
         ? http.get(`${BASE}/songs`, { headers: h })
         : i % 3 === 1
-          ? http.get(`${BASE}/songs/${songId}`, { headers: h })
+          ? // a queued song may not be written yet: 404 is expected, not an error
+            http.get(`${BASE}/songs/${songId}`, {
+              headers: h,
+              responseCallback: http.expectedStatuses(200, queued ? 404 : 200),
+            })
           : http.get(`${BASE}/artists/${artistId}`, { headers: h });
-    check(res, { "read 200": (r) => r.status === 200 });
+    check(res, { "read ok": (r) => r.status === 200 || (queued && r.status === 404) });
     sleep(0.3);
   }
 }

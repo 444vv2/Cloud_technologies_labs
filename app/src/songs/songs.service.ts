@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,6 +7,7 @@ import { CreateSongDto } from './dto/create-song.dto';
 import { UpdateSongDto } from './dto/update-song.dto';
 import { ArtistsService } from '../artists/artists.service';
 import { CacheService } from '../cache/cache.service';
+import { QueueService } from '../queue/queue.service';
 
 const LIST_PREFIX = 'songs:list:';
 const LIST_TTL_SEC = 45;
@@ -16,13 +18,26 @@ export class SongsService {
     @InjectRepository(Song) private readonly repo: Repository<Song>,
     private readonly artists: ArtistsService,
     private readonly cache: CacheService,
+    private readonly queue: QueueService,
   ) {}
 
   async create(dto: CreateSongDto) {
-    const artist = await this.artists.findOne(dto.artistId);
-    const saved = await this.repo.save(this.repo.create({ ...dto, artist }));
+    if (!this.queue.asyncWrites) return this.insertSong(dto, randomUUID());
+    await this.artists.findOne(dto.artistId);
+    const id = randomUUID();
+    await this.queue.send({ id, dto });
+    return { id, status: 'pending' as const };
+  }
+
+  async insertSong(dto: CreateSongDto, id: string) {
+    await this.repo
+      .createQueryBuilder()
+      .insert()
+      .values({ ...dto, id })
+      .orIgnore()
+      .execute();
     await this.cache.delByPrefix(LIST_PREFIX);
-    return saved;
+    return this.findOne(id);
   }
 
   async findAll(artistId?: string) {
