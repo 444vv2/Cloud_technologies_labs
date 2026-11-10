@@ -35,15 +35,22 @@ Cloud
 │  │  │  └─ cache.service.ts
 │  │  ├─ debug.controller.ts
 │  │  ├─ health.controller.ts
+│  │  ├─ idempotency
+│  │  │  ├─ idempotency.interceptor.spec.ts
+│  │  │  └─ idempotency.interceptor.ts
 │  │  ├─ main.ts
-│  │  └─ songs
-│  │     ├─ dto
-│  │     │  ├─ create-song.dto.ts
-│  │     │  └─ update-song.dto.ts
-│  │     ├─ song.entity.ts
-│  │     ├─ songs.controller.ts
-│  │     ├─ songs.module.ts
-│  │     └─ songs.service.ts
+│  │  ├─ queue
+│  │  │  ├─ queue.module.ts
+│  │  │  └─ queue.service.ts
+│  │  ├─ songs
+│  │  │  ├─ dto
+│  │  │  │  ├─ create-song.dto.ts
+│  │  │  │  └─ update-song.dto.ts
+│  │  │  ├─ song.entity.ts
+│  │  │  ├─ songs.controller.ts
+│  │  │  ├─ songs.module.ts
+│  │  │  └─ songs.service.ts
+│  │  └─ worker.ts
 │  ├─ tsconfig.build.json
 │  └─ tsconfig.json
 ├─ docker-compose.yaml
@@ -57,11 +64,16 @@ Cloud
 │     │  ├─ ecs.png
 │     │  ├─ monitors.png
 │     │  └─ rds.png
-│     └─ no_cache
-│        ├─ alarm_msg.png
-│        ├─ cpu_metric.png
-│        ├─ ecs.png
-│        └─ monitors.png
+│     ├─ night_pod_count.png
+│     ├─ no_cache
+│     │  ├─ alarm_msg.png
+│     │  ├─ cpu_metric.png
+│     │  ├─ ecs.png
+│     │  └─ monitors.png
+│     ├─ queue
+│     │  ├─ monitors.png
+│     │  └─ queue_list.png
+│     └─ show_worker_work.png
 ├─ infra
 │  ├─ .terraform.lock.hcl
 │  ├─ alb.tf
@@ -75,10 +87,12 @@ Cloud
 │  ├─ network.tf
 │  ├─ outputs.tf
 │  ├─ providers.tf
+│  ├─ queue.tf
 │  ├─ rds.tf
 │  ├─ redis.tf
 │  ├─ security.tf
-│  └─ variables.tf
+│  ├─ variables.tf
+│  └─ worker.tf
 ├─ loadtest
 │  └─ k6.js
 └─ README.md
