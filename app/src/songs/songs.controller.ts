@@ -17,7 +17,7 @@ import { IdempotencyInterceptor } from '../idempotency/idempotency.interceptor';
 import { SongsService } from './songs.service';
 import { CreateSongDto } from './dto/create-song.dto';
 import { UpdateSongDto } from './dto/update-song.dto';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiHeader } from '@nestjs/swagger';
 
 @ApiTags('Songs')
 @Controller('songs')
@@ -26,6 +26,11 @@ export class SongsController {
 
   @Post()
   @UseInterceptors(IdempotencyInterceptor)
+  @ApiHeader({
+    name: 'Idempotency-Key',
+    required: false,
+    description: 'A unique key to ensure idempotent requests.',
+  })
   @ApiOperation({ summary: 'Create a new song' })
   @ApiResponse({
     status: 201,
