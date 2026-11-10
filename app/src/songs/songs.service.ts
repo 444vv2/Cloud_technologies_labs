@@ -10,7 +10,7 @@ import { CacheService } from '../cache/cache.service';
 import { QueueService } from '../queue/queue.service';
 
 const LIST_PREFIX = 'songs:list:';
-const LIST_TTL_SEC = 45;
+const LIST_TTL_SEC = 10;
 const MAX_SONGS = 1000;
 
 @Injectable()
@@ -37,7 +37,6 @@ export class SongsService {
       .values({ ...dto, id })
       .orIgnore()
       .execute();
-    await this.cache.delByPrefix(LIST_PREFIX);
     return this.findOne(id);
   }
 
