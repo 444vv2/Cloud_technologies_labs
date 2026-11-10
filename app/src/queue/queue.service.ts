@@ -27,7 +27,7 @@ export class QueueService {
       new ReceiveMessageCommand({
         QueueUrl: this.url,
         MaxNumberOfMessages: 10,
-        WaitTimeSeconds: 20, // long polling: fewer empty requests
+        WaitTimeSeconds: 20,
       }),
       { abortSignal: signal },
     );

@@ -35,7 +35,7 @@ export function setup() {
   );
   const artistId = artist.json("id");
   if (!artistId) throw new Error(`artist create failed: ${artist.status} ${artist.body}`);
-  return { h, artistId };
+  return { h, artistId, before: http.get(`${BASE}/debug/cache`).json() };
 }
 
 export default function ({ h, artistId }) {
@@ -44,7 +44,6 @@ export default function ({ h, artistId }) {
     JSON.stringify({ title: `k6-${__VU}-${__ITER}`, artistId }),
     { headers: h },
   );
-  // 201 = sync write, 202 = queued (ASYNC_WRITES=true)
   check(created, { "create 201/202": (r) => r.status === 201 || r.status === 202 });
   const songId = created.json("id");
   const queued = created.status === 202;
@@ -54,7 +53,7 @@ export default function ({ h, artistId }) {
       i % 3 === 0
         ? http.get(`${BASE}/songs`, { headers: h })
         : i % 3 === 1
-          ? // a queued song may not be written yet: 404 is expected, not an error
+          ?
             http.get(`${BASE}/songs/${songId}`, {
               headers: h,
               responseCallback: http.expectedStatuses(200, queued ? 404 : 200),
@@ -63,4 +62,11 @@ export default function ({ h, artistId }) {
     check(res, { "read ok": (r) => r.status === 200 || (queued && r.status === 404) });
     sleep(0.3);
   }
+}
+
+export function teardown({ before }) {
+  const a = http.get(`${BASE}/debug/cache`).json();
+  const hits = a.hits - before.hits;
+  const misses = a.misses - before.misses;
+  console.log(`cache hit ratio: ${hits}/${hits + misses} = ${(hits / (hits + misses || 1)).toFixed(3)}`);
 }
