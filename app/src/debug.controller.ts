@@ -4,7 +4,7 @@ import { Public } from './auth/public.decorator';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Public()
-@ApiTags('Debug')
+@ApiTags('Debug1212')
 @Controller('debug')
 export class DebugController {
   constructor(private readonly cache: CacheService) {}
